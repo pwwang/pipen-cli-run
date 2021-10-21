@@ -41,6 +41,7 @@ def test_plugin_added(capsys):
 
     assert "No such namespace" in capsys.readouterr().out
 
+
 def test_list(capsys, patch_init):
     with with_argv(["pipen", "run"]), pytest.raises(SystemExit):
         main()
@@ -108,6 +109,20 @@ def test_pipeline_run(patch_init, tmp_path):
     assert outfile.read_text().strip() == "1\n123"
 
 
+def test_procs_help(capsys, patch_init):
+    with with_argv(
+        [
+            "pipen",
+            "run",
+            "exm_procs",
+            "P1",
+        ]
+    ), pytest.raises(SystemExit):
+        main()
+
+    assert "The first process" in capsys.readouterr().out
+
+
 def test_procs_run(tmp_path, patch_init):
     infile = tmp_path / "infile.txt"
     infile.write_text("1234")
@@ -131,6 +146,7 @@ def test_procs_run(tmp_path, patch_init):
 
     outfile = tmp_path / "P1" / "out.txt"
     assert outfile.read_text().strip() == "1234"
+
 
 def test_full_opts(patch_init, capsys):
     with with_argv(

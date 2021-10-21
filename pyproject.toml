@@ -33,7 +33,7 @@ target-version = ['py37', 'py38', 'py39']
 include = '\.pyi?$'
 
 [tool.pytest.ini_options]
-addopts = "-vv --forked --cov-config=.coveragerc --cov=pipen_cli_run --cov-report xml:.coverage.xml --cov-report term-missing"
+addopts = "-vv -n auto --forked --cov-config=.coveragerc --cov=pipen_cli_run --cov-report xml:.coverage.xml --cov-report term-missing"
 filterwarnings = [
     #"error"
 ]

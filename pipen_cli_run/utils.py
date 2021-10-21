@@ -77,6 +77,8 @@ def params_from_pipeline(
     )
 
     pipeline._build_proc_relationships()
+    if single:
+        out.desc = [doc_to_summary(pipeline.procs[0].__doc__ or "")]
     for proc in pipeline.procs:
         anno = annotate_process(proc)
         if not single:
