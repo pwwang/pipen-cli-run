@@ -14,6 +14,7 @@ from .utils import (
     doc_to_summary,
     params_from_pipeline,
     set_proc_data,
+    skip_hooked_args,
 )
 
 try:
@@ -93,6 +94,7 @@ class PipenCliRunPlugin(CLIPlugin):
 
     def parse_args(self, args: List[str]) -> Mapping[str, Any]:
         """Parse the arguments"""
+        args = skip_hooked_args(args)
         if len(args) == 0:
             self._print_help()
 

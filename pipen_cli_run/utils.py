@@ -1,6 +1,7 @@
 """Default settings and utilities"""
 
-from typing import TYPE_CHECKING, Any, Mapping, Type
+import re
+from typing import TYPE_CHECKING, Any, List, Mapping, Type
 from pandas import DataFrame
 
 from pardoc import google_parser
@@ -38,6 +39,26 @@ def annotate_process(proc: Type["Proc"]) -> Mapping[str, Any]:
             if not isinstance(item, ParsedItem):  # pragma: no cover
                 continue
             out[key][item.name] = item.desc
+
+    return out
+
+
+def skip_hooked_args(args: List[str]) -> List[str]:
+    """This allows the modules to have some extra arguments starting with `+`
+    """
+    out = []
+    skipping = False
+    for arg in args:
+        if skipping:
+            skipping = False
+            continue
+        if re.match(r"^\+[-\w\.]+$", arg):
+            skipping = True
+            continue
+        if re.match(r"^\+[-\w\.]+=.+$", arg):
+            skipping = False
+            continue
+        out.append(arg)
 
     return out
 
@@ -133,14 +154,12 @@ def params_from_pipeline(
             show=False,
             type="ns",
         )
-
         for key, val in (proc.envs or {}).items():
             out.add_param(
                 f"envs.{key}" if single else f"{proc.name}.envs.{key}",
                 default=val,
                 desc=anno["Envs"].get(key, "Undescribed."),
                 argname_shorten=False,
-                type="ns",
             )
 
         if not single:

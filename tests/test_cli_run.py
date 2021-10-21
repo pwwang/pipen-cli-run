@@ -123,6 +123,39 @@ def test_procs_help(capsys, patch_init):
     assert "The first process" in capsys.readouterr().out
 
 
+def test_extra_args(capsys, patch_init):
+    with with_argv(
+        [
+            "pipen",
+            "run",
+            "exm_procs",
+            "P1",
+            "+extra",
+            "1",
+        ]
+    ), pytest.raises(SystemExit):
+        assert "+extra" in sys.argv
+        main()
+
+    assert "+extra" not in sys.argv
+    assert "The first process" in capsys.readouterr().out
+
+def test_extra_args2(patch_init):
+    with with_argv(
+        [
+            "pipen",
+            "run",
+            "exm_procs",
+            "P1",
+            "+extra=2",
+        ]
+    ), pytest.raises(SystemExit):
+        assert "+extra=2" in sys.argv
+        main()
+
+    assert "+extra=2" not in sys.argv
+
+
 def test_procs_run(tmp_path, patch_init):
     infile = tmp_path / "infile.txt"
     infile.write_text("1234")

@@ -1,3 +1,4 @@
+import sys
 from pipen import Proc
 
 class UndescribedProc(Proc):
@@ -8,6 +9,9 @@ class P1(Proc):
 
     Input:
         infile: The input file
+
+    Envs:
+        a: Environment variable A
     """
     input = "infile:file"
     output = "outfile:file:out.txt"
