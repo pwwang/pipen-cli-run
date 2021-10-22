@@ -116,7 +116,7 @@ def params_from_pipeline(
                 "in" if single else f"{proc.name}.in",
                 desc="Input data for the process.",
                 argname_shorten=False,
-                show=False,
+                # show=False,
                 type="ns",
             )
 
@@ -151,7 +151,7 @@ def params_from_pipeline(
             "envs" if single else f"{proc.name}.envs",
             desc="Envs for the process.",
             argname_shorten=False,
-            show=False,
+            # show=False,
             type="ns",
         )
         for key, val in (proc.envs or {}).items():
