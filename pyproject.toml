@@ -13,7 +13,7 @@ pardoc = "^0.0.3"
 pandas = "^1.3"
 rich = "^10.12"
 pyparam = "^0.4"
-pipen-args = "^0.0"
+pipen-args = "^0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

@@ -1,8 +1,8 @@
 """Provides PipenCliRun"""
+import sys
 from types import ModuleType
 from typing import Any, Mapping, List
 
-from diot import Diot
 from pipen import Proc, Pipen
 from pipen.cli import CLIPlugin
 from pipen.utils import importlib_metadata
@@ -11,9 +11,6 @@ from rich import print
 
 from .utils import (
     ENTRY_POINT_GROUP,
-    doc_to_summary,
-    params_from_pipeline,
-    set_proc_data,
     skip_hooked_args,
 )
 
@@ -53,6 +50,8 @@ class PipenCliRunPlugin(CLIPlugin):
 
     def _print_ns_help(self, namespace: str, ns_mod: ModuleType) -> None:
         """Print help for the namespace"""
+        from pipen_args import _doc_to_summary
+
         command = self.params.add_command(
             namespace,
             ns_mod.__doc__.strip() if ns_mod.__doc__ else "Undescribed.",
@@ -64,10 +63,14 @@ class PipenCliRunPlugin(CLIPlugin):
         )
         for attrname in dir(ns_mod):
             attrval = getattr(ns_mod, attrname)
-            if isinstance(attrval, Pipen):
+            if (
+                callable(attrval)
+                and attrval.__annotations__
+                and attrval.__annotations__.get("return") is Pipen
+            ):
                 command.add_command(
                     attrname,
-                    desc=attrval.desc,
+                    desc=_doc_to_summary(attrval.__doc__ or "Undescribed."),
                     group="PIPELINES",
                 )
             elif not isinstance(attrval, type):
@@ -75,7 +78,7 @@ class PipenCliRunPlugin(CLIPlugin):
             elif issubclass(attrval, Proc) and attrval.input:
                 command.add_command(
                     attrval.name,
-                    desc=doc_to_summary(attrval.__doc__ or "Undescribed."),
+                    desc=_doc_to_summary(attrval.__doc__ or "Undescribed."),
                     group="PROCESSES",
                 )
         command.print_help()
@@ -86,6 +89,7 @@ class PipenCliRunPlugin(CLIPlugin):
         pms = Params(
             desc=self.__class__.__doc__,
         )
+        pms._prog = f"{pms._prog} {self.name}"
         pms.add_param(
             pms.help_keys,
             desc="Print help for this command.",
@@ -123,41 +127,31 @@ class PipenCliRunPlugin(CLIPlugin):
         if pname in help_keys:
             self._print_ns_help(namespace, module)
 
-        pipeline = getattr(module, pname)
-        full_opts = "--full-opts" in args[2:]
-        if full_opts:
-            args = args + help_keys[:1]
-
-        single = False
-        if not isinstance(pipeline, Pipen):
-            pipeline = Pipen(
-                name=f"{pipeline.name}-pipeline",
-                desc="A pipeline wrapper to run a single process",
-            ).set_starts(pipeline)
-            single = True
-
-        pms = params_from_pipeline(
-            namespace,
-            pname,
-            pipeline,
-            full_opts=full_opts,
-            single=single,
-        )
-        parsed = Diot.from_namespace(pms.parse(args[2:]))
-        parsed["__single__"] = single
-        parsed["__pipeline__"] = pipeline
-
-        return parsed
+        return {
+            "__name__": pname,
+            "__module__": module,
+            "__cli_args__": args[2:],
+        }
 
     def exec_command(self, args: Mapping[str, Any]) -> None:
         """Execute the command"""
-        pipeline = args["__pipeline__"]
-        single = args["__single__"]
-        if single:
-            set_proc_data(pipeline.procs[0], args)
+        from pipen_args import args as pargs
+        pargs.cli_args = args["__cli_args__"]
+        pargs._prog = " ".join([pargs._prog] + sys.argv[1:-len(pargs.cli_args)])
+
+        pname = args["__name__"]
+        module = args["__module__"]
+        proc_or_pipeline = getattr(module, pname)
+        if (
+            callable(proc_or_pipeline)
+            and proc_or_pipeline.__annotations__
+            and proc_or_pipeline.__annotations__.get("return") is Pipen
+        ):
+            pipeline = proc_or_pipeline()
+
         else:
-            for proc in pipeline.procs:
-                if proc.name in args:
-                    set_proc_data(proc, args[proc.name])
+            pipeline = Pipen(name=f"{pname}_pipeline", desc="").set_start(
+                proc_or_pipeline
+            )
 
         pipeline.run()

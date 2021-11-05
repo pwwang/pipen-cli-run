@@ -188,9 +188,9 @@ def test_full_opts(patch_init, capsys):
             "run",
             "exm_procs",
             "P1",
-            "--full-opts",
+            "--full",
         ]
     ), pytest.raises(SystemExit):
         main()
 
-    assert "error-strategy" in capsys.readouterr().out
+    assert "error_strategy" in capsys.readouterr().out

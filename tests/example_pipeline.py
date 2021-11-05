@@ -1,3 +1,4 @@
+
 from pipen import Proc, Pipen
 
 class P1(Proc):
@@ -10,4 +11,5 @@ class P2(Proc):
     output = "outfile:file:out.txt"
     script = "cat {{in.infile}} > {{out.outfile}}; echo 123 >> {{out.outfile}}"
 
-example_pipeline = Pipen().set_start(P1)
+def example_pipeline() -> Pipen:
+    return Pipen(__name__).set_start(P1)
