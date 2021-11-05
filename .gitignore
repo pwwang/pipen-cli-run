@@ -148,3 +148,4 @@ docs/api/
 # End of https://www.gitignore.io/api/python
 
 .pipen/
+*_results
