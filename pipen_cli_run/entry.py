@@ -65,7 +65,7 @@ class PipenCliRunPlugin(CLIPlugin):
             attrval = getattr(ns_mod, attrname)
             if (
                 callable(attrval)
-                and attrval.__annotations__
+                and getattr(attrval, "__annotations__", False)
                 and attrval.__annotations__.get("return") is Pipen
             ):
                 command.add_command(
