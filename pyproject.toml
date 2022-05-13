@@ -7,18 +7,19 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
-pipen = "^0.2"
-diot = "^0.1"
-pardoc = "^0.0.3"
-pandas = "^1.3"
-rich = "^10.12"
-pyparam = "^0.4"
-pipen-args = "^0.1"
+pipen = "^0.3"
+pardoc = "^0.0"
+## already required by pipen
+# diot = "^0.1"
+# pandas = "^1.3"
+# rich = "^12"
+# pyparam = "^0.5"
+pipen-args = "^0.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
-pytest-cov = "^3.0.0"
-pytest-xdist = "^2.4.0"
+pytest = "^7"
+pytest-cov = "^3"
+pytest-xdist = "^2"
 
 [tool.poetry.plugins.pipen_cli]
 cli-run = "pipen_cli_run:PipenCliRunPlugin"
