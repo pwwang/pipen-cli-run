@@ -35,7 +35,7 @@ class PipenCliRunPlugin(CLIPlugin):
                 if epoint.group != ENTRY_POINT_GROUP:
                     continue
                 # don't load them
-                self.entry_points[epoint.name] = epoint
+                self.entry_points[epoint.name] = epoint  # pragma: no cover
 
     def _print_help(self) -> None:
         """Print the root help page"""
