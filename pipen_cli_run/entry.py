@@ -9,10 +9,8 @@ from pipen.utils import importlib_metadata
 from pyparam import Params
 from rich import print
 
-from .utils import (
-    ENTRY_POINT_GROUP,
-    skip_hooked_args,
-)
+from .utils import ENTRY_POINT_GROUP, skip_hooked_args
+from .pipeline import Pipeline
 
 try:
     from functools import cached_property
@@ -63,18 +61,17 @@ class PipenCliRunPlugin(CLIPlugin):
         )
         for attrname in dir(ns_mod):
             attrval = getattr(ns_mod, attrname)
-            if (
-                callable(attrval)
-                and getattr(attrval, "__annotations__", False)
-                and attrval.__annotations__.get("return") is Pipen
-            ):
+            if not isinstance(attrval, type):
+                continue
+            # If it is a pipeline
+            if issubclass(attrval, Pipeline):
                 command.add_command(
                     attrname,
-                    desc=_doc_to_summary(attrval.__doc__ or "Undescribed."),
+                    desc=_doc_to_summary(
+                        attrval.__doc__ or ns_mod.__doc__ or "Undescribed."
+                    ),
                     group="PIPELINES",
                 )
-            elif not isinstance(attrval, type):
-                continue
             elif issubclass(attrval, Proc) and attrval.input:
                 command.add_command(
                     attrval.name,
@@ -142,11 +139,8 @@ class PipenCliRunPlugin(CLIPlugin):
         pname = args["__name__"]
         module = args["__module__"]
         proc_or_pipeline = getattr(module, pname)
-        if (
-            callable(proc_or_pipeline)
-            and proc_or_pipeline.__annotations__
-            and proc_or_pipeline.__annotations__.get("return") is Pipen
-        ):
+
+        if issubclass(proc_or_pipeline, Pipeline):
             pipeline = proc_or_pipeline()
 
         else:

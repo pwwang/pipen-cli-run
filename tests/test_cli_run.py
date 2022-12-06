@@ -90,6 +90,20 @@ def test_pipeline(capsys, patch_init):
     assert "--P1.in.a" in capsys.readouterr().out
 
 
+def test_pipeline_not_impl_build(patch_init):
+    with with_argv(
+        ["pipen", "run", "exm_pipes", "example_pipeline2"]
+    ), pytest.raises(TypeError, match="abstract method"):
+        main()
+
+
+def test_pipeline_no_starts(patch_init):
+    with with_argv(
+        ["pipen", "run", "exm_pipes", "example_pipeline3"]
+    ), pytest.raises(ValueError, match="No start processes"):
+        main()
+
+
 def test_pipeline_run(patch_init, tmp_path):
     with with_argv(
         [
@@ -105,6 +119,13 @@ def test_pipeline_run(patch_init, tmp_path):
     ):
         main()
 
+    outfile = tmp_path / "P2" / "out.txt"
+    assert outfile.read_text().strip() == "1\n123"
+
+
+def test_pipeline_api(tmp_path):
+    pipe = example_pipeline.example_pipeline()
+    pipe.run(["1"], outdir=str(tmp_path))
     outfile = tmp_path / "P2" / "out.txt"
     assert outfile.read_text().strip() == "1\n123"
 
@@ -139,6 +160,7 @@ def test_extra_args(capsys, patch_init):
 
     assert "+extra" not in sys.argv
     assert "The first process" in capsys.readouterr().out
+
 
 def test_extra_args2(patch_init):
     with with_argv(

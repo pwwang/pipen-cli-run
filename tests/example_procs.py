@@ -1,8 +1,9 @@
-import sys
 from pipen import Proc
+
 
 class UndescribedProc(Proc):
     input = "a"
+
 
 class P1(Proc):
     """The first process
@@ -13,6 +14,7 @@ class P1(Proc):
     Envs:
         a: Environment variable A
     """
+
     input = "infile:file"
     output = "outfile:file:out.txt"
     envs = {"a": 1}
@@ -20,8 +22,10 @@ class P1(Proc):
     scheduler_opts = {"a": 3}
     script = "cp {{in.infile}} {{out.outfile}}"
 
+
 class P2(Proc):
     """
 
     Another process"""
+
     input = "a"
