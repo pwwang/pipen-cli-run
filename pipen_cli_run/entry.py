@@ -64,7 +64,7 @@ class PipenCliRunPlugin(CLIPlugin):
             if not isinstance(attrval, type):
                 continue
             # If it is a pipeline
-            if issubclass(attrval, Pipeline):
+            if issubclass(attrval, Pipeline) and attrval is not Pipeline:
                 command.add_command(
                     attrname,
                     desc=_doc_to_summary(
@@ -140,7 +140,10 @@ class PipenCliRunPlugin(CLIPlugin):
         module = args["__module__"]
         proc_or_pipeline = getattr(module, pname)
 
-        if issubclass(proc_or_pipeline, Pipeline):
+        if (
+            issubclass(proc_or_pipeline, Pipeline)
+            and proc_or_pipeline is not Pipeline
+        ):
             pipeline = proc_or_pipeline()
 
         else:
