@@ -8,7 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.7.1"
 pipen = "^0.3"
-pardoc = "^0.0"
+pardoc = "^0.1"
 ## already required by pipen
 # diot = "^0.1"
 # pandas = "^1.3"

@@ -289,15 +289,15 @@ test = ["hypothesis (>=3.58)", "pytest (>=6.0)", "pytest-xdist"]
 
 [[package]]
 name = "pardoc"
-version = "0.0.3"
+version = "0.1.0"
 description = "Yet another docstring parser for python"
 category = "main"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-diot = "*"
-lark-parser = "<1.0.0"
+diot = ">=0.1.6,<0.2.0"
+lark-parser = ">=0.12,<0.13"
 
 [[package]]
 name = "pipda"
@@ -334,14 +334,14 @@ xqute = ">=0.1,<0.2"
 
 [[package]]
 name = "pipen-args"
-version = "0.3.2"
+version = "0.3.3"
 description = "Command-line argument parser for pipen."
 category = "main"
 optional = false
 python-versions = ">=3.7.1,<4.0.0"
 
 [package.dependencies]
-pardoc = ">=0.0,<0.1"
+pardoc = ">=0.1,<0.2"
 pipen = ">=0.3,<0.4"
 
 [[package]]
@@ -673,7 +673,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "91f7862d29ed288a27c52e77f3b09a696348674c61e7859423ad84c9c38a6dd8"
+content-hash = "762810b5057f5779193e1ed49a301eb94a9fe1469717ea8b8ba058086263ca68"
 
 [metadata.files]
 aiofiles = [
@@ -943,8 +943,8 @@ pandas = [
     {file = "pandas-1.3.5.tar.gz", hash = "sha256:1e4285f5de1012de20ca46b188ccf33521bff61ba5c5ebd78b4fb28e5416a9f1"},
 ]
 pardoc = [
-    {file = "pardoc-0.0.3-py3-none-any.whl", hash = "sha256:f42bb6d05f80247e9205e562a2e5bbb707fc96938e839b30978c58b174b2e2d3"},
-    {file = "pardoc-0.0.3.tar.gz", hash = "sha256:f1561a38e3eb7c6712c615a6e6351f364c4008ac076c5d763d2fba1950ef3bf5"},
+    {file = "pardoc-0.1.0-py3-none-any.whl", hash = "sha256:64348487740f7870fed88668e277c4212ae3c253b6351b6eba566ad0ae190bd5"},
+    {file = "pardoc-0.1.0.tar.gz", hash = "sha256:38a5947740e9a353a728e60c2db2be547f44c0227308f9d09ac79227fcccc620"},
 ]
 pipda = [
     {file = "pipda-0.10.0-py3-none-any.whl", hash = "sha256:ccdf29dfea636886607907dbf25b414739cef749a4c2899356b9767bfd0c848b"},
@@ -955,8 +955,8 @@ pipen = [
     {file = "pipen-0.3.8.tar.gz", hash = "sha256:a00674ba62cf13fe93a983fdb83d4ba8ad0bddd83027246a6a0dddcf8161ec7b"},
 ]
 pipen-args = [
-    {file = "pipen-args-0.3.2.tar.gz", hash = "sha256:f2b55ef86d6955a037519b560abfecbb18b61f4245feb9e5b615194e013302d3"},
-    {file = "pipen_args-0.3.2-py3-none-any.whl", hash = "sha256:77639b84de8b8f3edecf2b71b9193bda0b9d9f7aca7baad9333e13b668b1de89"},
+    {file = "pipen_args-0.3.3-py3-none-any.whl", hash = "sha256:1772702e07be40075f9ed0049226c0c11082c9219ae9e78a679d14d984186f66"},
+    {file = "pipen_args-0.3.3.tar.gz", hash = "sha256:2a9217aa82da6d38cd568dea04a947978e374f14902cd3f28df12ad2c1427677"},
 ]
 pluggy = [
     {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
