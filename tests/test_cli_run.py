@@ -4,7 +4,7 @@ from contextlib import contextmanager
 import pytest
 from pipen.cli import main
 from pipen_cli_run import PipenCliRunPlugin
-from . import example_procs, example_pipeline
+from . import example_procs, example_pipeline, example_pipeline_process
 from .utils import plugin_to_entrypoint
 
 
@@ -12,6 +12,9 @@ def init(self):
     self.entry_points = {}
     self.entry_points["exm_procs"] = plugin_to_entrypoint(example_procs)
     self.entry_points["exm_pipes"] = plugin_to_entrypoint(example_pipeline)
+    self.entry_points["exm_pipes_proc"] = plugin_to_entrypoint(
+        example_pipeline_process
+    )
 
 
 @pytest.fixture
@@ -110,6 +113,25 @@ def test_pipeline_run(patch_init, tmp_path):
             "pipen",
             "run",
             "exm_pipes",
+            "example_pipeline",
+            "--P1.in.a",
+            "1",
+            "--outdir",
+            str(tmp_path),
+        ]
+    ):
+        main()
+
+    outfile = tmp_path / "P2" / "out.txt"
+    assert outfile.read_text().strip() == "1\n123"
+
+
+def test_pipeline_run_process_decor(patch_init, tmp_path):
+    with with_argv(
+        [
+            "pipen",
+            "run",
+            "exm_pipes_proc",
             "example_pipeline",
             "--P1.in.a",
             "1",

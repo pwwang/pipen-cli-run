@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Mapping
+from functools import wraps
+from typing import Any, Mapping, Callable
 
 from diot import Diot
 from pipen import Pipen
@@ -59,3 +60,30 @@ class Pipeline(ABC):
             pipe.set_data(data)
         pipe.run()
         return pipe
+
+
+def process(method: Callable = None, start: bool = False, end: bool = False):
+    """Decorator to add a process to a pipeline
+
+    Args:
+        method: The method to decorate
+        start: Whether the process is a start process
+        end: Whether the process is an end process
+
+    Returns:
+        The decorated method
+    """
+    if method is None:
+        return lambda meth: process(meth, start, end)
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        proc = method(self, *args, **kwargs)
+        if start:
+            self.starts.append(proc)
+        if end:
+            self.ends.append(proc)
+        self.procs[proc.name] = proc
+        return proc
+
+    return wrapper
