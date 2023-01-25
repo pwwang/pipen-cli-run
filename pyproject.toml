@@ -20,6 +20,7 @@ pipen-args = "^0.3"
 pytest = "^7"
 pytest-cov = "^4"
 pytest-xdist = "^3"
+pytest-forked = "^1"
 
 [tool.poetry.plugins.pipen_cli]
 cli-run = "pipen_cli_run:PipenCliRunPlugin"
@@ -35,7 +36,7 @@ include = '\.pyi?$'
 
 [tool.pytest.ini_options]
 # addopts = "-vv --cov-config=.coveragerc --cov=pipen_cli_run --cov-report xml:.coverage.xml --cov-report term-missing"
-addopts = "-vv --forked -p no:asyncio --cov-config=.coveragerc --cov=pipen_cli_run --cov-report xml:.coverage.xml --cov-report term-missing"
+addopts = "-vv --forked -n auto -p no:asyncio --cov-config=.coveragerc --cov=pipen_cli_run --cov-report xml:.coverage.xml --cov-report term-missing"
 filterwarnings = [
     #"error"
 ]
