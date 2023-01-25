@@ -29,6 +29,7 @@ def patch_init():
 def with_argv(argv):
     old = sys.argv[:]
     sys.argv = argv
+    print("argv:", sys.argv)
     yield
     sys.argv = old
 
@@ -118,6 +119,8 @@ def test_pipeline_run(patch_init, tmp_path):
             "1",
             "--outdir",
             str(tmp_path),
+            "--name",
+            "pipeline_run",
         ]
     ):
         main()
@@ -147,7 +150,11 @@ def test_pipeline_run_process_decor(patch_init, tmp_path):
 
 def test_pipeline_api(tmp_path):
     pipe = example_pipeline.example_pipeline()
-    pipe.run(["1"], outdir=str(tmp_path))
+    pipe.run(
+        ["1"],
+        outdir=str(tmp_path),
+        name="pipeline_api",
+    )
     outfile = tmp_path / "P2" / "out.txt"
     assert outfile.read_text().strip() == "1\n123"
 
