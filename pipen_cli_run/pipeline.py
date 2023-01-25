@@ -24,7 +24,7 @@ class Pipeline(ABC):
         self,
         options: Mapping[str, Any] = None,
     ) -> None:
-        self.options = Diot(self.__class__.defaults) | (options or {})
+        self.options = Diot(self.__class__.defaults or {}) | (options or {})
         self.starts = []
         self.ends = []
         self.procs = Diot()
