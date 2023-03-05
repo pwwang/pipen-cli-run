@@ -1,5 +1,5 @@
 from pipen import Proc
-from pipen_cli_run import Pipeline, process
+from pipen_args import ProcGroup
 
 some_other_value = 123
 
@@ -16,22 +16,25 @@ class P2(Proc):
     script = "cat {{in.infile}} > {{out.outfile}}; echo 123 >> {{out.outfile}}"
 
 
-class example_pipeline(Pipeline):
-    """This is a pipeline"""
+class ExampleProcGroup(ProcGroup):
+    """This is a process group
+    with 2 processes
 
-    @process(start=True)
-    def build_p1(self):
+    Args:
+        input (action:extend;nargs=+): The input
+    """
+    DEFAULTS = {"input": ["100"]}
+
+    @ProcGroup.add_proc
+    def p1(self):
+        P1.input_data = self.opts.input
         return P1
 
-    @process(end=True)
-    def build_p2(self, p1):
-        P2.requires = p1
+    @ProcGroup.add_proc
+    def p2(self):
+        P2.requires = self.p1
         return P2
-
-    def build(self) -> None:
-        p1 = self.build_p1()
-        self.build_p2(p1)
 
 
 if __name__ == "__main__":
-    example_pipeline().run(["1"])
+    ExampleProcGroup().as_pipen().run()

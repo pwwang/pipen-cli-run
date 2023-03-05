@@ -1,154 +1,163 @@
 """Provides PipenCliRun"""
-import sys
-from types import ModuleType
-from typing import Any, Mapping, List
+from __future__ import annotations
 
-from pipen import Proc, Pipen
+from typing import TYPE_CHECKING, List
+
+from pipen import Proc, Pipen, ProcGroup
 from pipen.cli import CLIPlugin
 from pipen.utils import importlib_metadata
-from pyparam import Params
-from rich import print
+from pipen_args import ProcGroup as ArgsProcGroup
 
-from .utils import ENTRY_POINT_GROUP, skip_hooked_args
-from .pipeline import Pipeline
+from .version import __version__
 
-try:
-    from functools import cached_property
-except ImportError:  # pragma: no cover
-    from cached_property import cached_property
+if TYPE_CHECKING:  # pragma: no cover
+    from argx import ArgumentParser, Namespace
+
+ENTRY_POINT_GROUP = "pipen_cli_run"
+
+
+def get_short_summary(docstring: str | None) -> str:
+    """Get the short summary of a docstring"""
+    if not docstring:
+        return ""
+    lines = docstring.lstrip().splitlines()
+    short_summary = lines[0]
+    for line in lines[1:]:
+        if not line.strip():
+            break
+        short_summary += line.strip() + " "
+    return short_summary.rstrip()
 
 
 class PipenCliRunPlugin(CLIPlugin):
     """Run a process or a pipeline"""
 
-    from .version import __version__
-
+    version = __version__
     name = "run"
 
-    def __init__(self) -> None:
-        """Read entry points"""
+    def __init__(
+        self,
+        parser: ArgumentParser,
+        subparser: ArgumentParser,
+    ) -> None:
+        super().__init__(parser, subparser)
         self.entry_points = {}
+
         for dist in importlib_metadata.distributions():
             for epoint in dist.entry_points:
                 if epoint.group != ENTRY_POINT_GROUP:
                     continue
-                # don't load them
+                # don't load them yet for performance
                 self.entry_points[epoint.name] = epoint  # pragma: no cover
 
-    def _print_help(self) -> None:
-        """Print the root help page"""
-        for key in sorted(self.entry_points):
-            desc = self.entry_points[key].load().__doc__
-            self.params.add_command(
-                key,
-                desc.strip() if desc else "Undescribed.",
-                group="NAMESPACES",
+        subparser.pre_parse = self._subparser_pre_parse
+
+    def _subparser_pre_parse(
+        self,
+        parser: ArgumentParser,
+        args: List[str],
+        namespace: Namespace,
+    ) -> None:
+        """Add processes to the namespace"""
+        if parser._subparsers_action:
+            return
+
+        parser._subparsers_action = parser.add_subparsers(
+            title='Process Namespaces',
+            dest="PROC_NAMESPACE",
+            required=True,
+        )
+
+        for ns, epoint in self.entry_points.items():
+            parser._subparsers_action.add_parser(
+                ns,
+                help=get_short_summary(epoint.load().__doc__),
+                pre_parse=self._subsubparser_pre_parse,
             )
-        self.params.print_help()
 
-    def _print_ns_help(self, namespace: str, ns_mod: ModuleType) -> None:
-        """Print help for the namespace"""
-        from pipen_args import _doc_to_summary
+    def _subsubparser_pre_parse(
+        self,
+        parser: ArgumentParser,
+        args: List[str],
+        namespace: Namespace,
+    ) -> None:
+        """Add processes to the namespace"""
+        if parser._subparsers_action:
+            return
 
-        command = self.params.add_command(
-            namespace,
-            ns_mod.__doc__.strip() if ns_mod.__doc__ else "Undescribed.",
-            force=True,
+        nsmod_name = [
+            name
+            for name, ps in (
+                parser.parent._subparsers_action._name_parser_map.items()
+            )
+            if ps is parser
+        ][0]
+
+        # isinstance doesn't work here
+        if type(self.entry_points[nsmod_name]).__name__ == "EntryPoint":
+            self.entry_points[nsmod_name] = (
+                self.entry_points[nsmod_name].load()
+            )
+
+        nsmod = self.entry_points[nsmod_name]
+        parser._subparsers_action = parser.add_subparsers(
+            title='Processes / Pipelines',
+            dest="PROCESS_OR_PIPELINE",
+            required=True,
         )
-        command.add_param(
-            command.help_keys,
-            desc="Print help for this namespace.",
-        )
-        for attrname in dir(ns_mod):
-            attrval = getattr(ns_mod, attrname)
+        for attrname in dir(nsmod):
+            attrval = getattr(nsmod, attrname)
             if not isinstance(attrval, type):
                 continue
             # If it is a pipeline
-            if issubclass(attrval, Pipeline) and attrval is not Pipeline:
-                command.add_command(
+            if (
+                issubclass(attrval, ProcGroup)
+                and attrval is not ProcGroup
+                and attrval is not ArgsProcGroup
+            ):
+                doc = attrval.__doc__ or nsmod.__doc__
+                parser._subparsers_action.add_parser(
                     attrname,
-                    desc=_doc_to_summary(
-                        attrval.__doc__ or ns_mod.__doc__ or "Undescribed."
-                    ),
-                    group="PIPELINES",
-                )
-            elif issubclass(attrval, Proc) and attrval.input:
-                command.add_command(
-                    attrval.name,
-                    desc=_doc_to_summary(attrval.__doc__ or "Undescribed."),
-                    group="PROCESSES",
-                )
-        command.print_help()
+                    help=get_short_summary(doc),
+                    prefix_chars="+",
+                    exit_on_void=True,
+                ).add_argument("pipeline_args", nargs="*")
+            elif issubclass(attrval, Proc) and attrval.input:  # type: ignore
+                doc = attrval.__doc__
+                parser._subparsers_action.add_parser(
+                    attrval.name,  # type: ignore
+                    help=get_short_summary(doc),
+                    prefix_chars="+",
+                    exit_on_void=True,
+                ).add_argument("pipeline_args", nargs="*")
 
-    @cached_property
-    def params(self) -> Params:
-        """Add run command"""
-        pms = Params(
-            desc=self.__class__.__doc__,
-        )
-        pms._prog = f"{pms._prog} {self.name}"
-        pms.add_param(
-            pms.help_keys,
-            desc="Print help for this command.",
-        )
-        return pms
+    def exec_command(self, args: Namespace) -> None:
+        from pipen_args import parser
 
-    def parse_args(self, args: List[str]) -> Mapping[str, Any]:
-        """Parse the arguments"""
-        args = skip_hooked_args(args)
-        if len(args) == 0:
-            self._print_help()
-
-        namespace = args[0]
-        help_keys = [
-            f"-{key}" if len(key) == 1 else f"--{key}"
-            for key in self.params.help_keys
-        ]
-        if namespace in help_keys:
-            self._print_help()
-
-        # add commands and parse
-        if namespace not in self.entry_points:
-            print(
-                "[red][b]ERROR: [/b][/red]No such namespace: "
-                f"[green]{namespace}[/green]"
-            )
-            self._print_help()
-
-        module = self.entry_points[namespace].load()
-        if len(args) == 1:
-            self._print_ns_help(namespace, module)
-
-        pname = args[1]
-        # Strictly, help_keys should be from command.help_keys
-        if pname in help_keys:
-            self._print_ns_help(namespace, module)
-
-        return {
-            "__name__": pname,
-            "__module__": module,
-            "__cli_args__": args[2:],
-        }
-
-    def exec_command(self, args: Mapping[str, Any]) -> None:
-        """Execute the command"""
-        from pipen_args import args as pargs
-        pargs.cli_args = args["__cli_args__"]
-        pargs._prog = " ".join([pargs._prog] + sys.argv[1:-len(pargs.cli_args)])
-
-        pname = args["__name__"]
-        module = args["__module__"]
-        proc_or_pipeline = getattr(module, pname)
-
+        nsmod_name = args.PROC_NAMESPACE
+        pname = args.PROCESS_OR_PIPELINE
         if (
-            issubclass(proc_or_pipeline, Pipeline)
-            and proc_or_pipeline is not Pipeline
-        ):
-            pipeline = proc_or_pipeline()
+            type(self.entry_points[nsmod_name]).__name__ == "EntryPoint"
+        ):  # pragma: no cover
+            self.entry_points[nsmod_name] = self.entry_points[nsmod_name].load()
 
+        module = self.entry_points[nsmod_name]
+        proc_or_group = getattr(module, pname)
+        if (
+            issubclass(proc_or_group, ProcGroup)
+            and proc_or_group is not ProcGroup
+            and proc_or_group is not ArgsProcGroup
+        ):
+            pipeline = proc_or_group().as_pipen(
+                f"{pname}_pipeline",
+                desc="",
+            )
         else:
-            pipeline = Pipen(name=f"{pname}_pipeline", desc="").set_start(
-                proc_or_pipeline
+            pipeline = (
+                Pipen(f"{pname}_pipeline", desc="")
+                .set_start(proc_or_group)
             )
 
+        # Send the args to the pipeline argument parser
+        parser.set_cli_args(args.pipeline_args)
         pipeline.run()
