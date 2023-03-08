@@ -121,7 +121,14 @@ class PipenCliRunPlugin(CLIPlugin):
                     help=get_short_summary(doc),
                     prefix_chars="+",
                     exit_on_void=True,
-                ).add_argument("pipeline_args", nargs="*")
+                ).add_argument(
+                    "pipeline_args",
+                    nargs="*",
+                    help=(
+                        "Arguments for the process or pipeline (Use -h/--help "
+                        "to see the arguments for the process or pipeline)"
+                    )
+                )
             elif issubclass(attrval, Proc) and attrval.input:  # type: ignore
                 doc = attrval.__doc__
                 parser._subparsers_action.add_parser(
@@ -129,7 +136,14 @@ class PipenCliRunPlugin(CLIPlugin):
                     help=get_short_summary(doc),
                     prefix_chars="+",
                     exit_on_void=True,
-                ).add_argument("pipeline_args", nargs="*")
+                ).add_argument(
+                    "pipeline_args",
+                    nargs="*",
+                    help=(
+                        "Arguments for the process or pipeline (Use -h/--help "
+                        "to see the arguments for the process or pipeline)"
+                    )
+                )
 
     def exec_command(self, args: Namespace) -> None:
         from pipen_args import parser, install  # noqa: F401
