@@ -132,7 +132,7 @@ class PipenCliRunPlugin(CLIPlugin):
                 ).add_argument("pipeline_args", nargs="*")
 
     def exec_command(self, args: Namespace) -> None:
-        from pipen_args import parser
+        from pipen_args import parser, install  # noqa: F401
 
         nsmod_name = args.PROC_NAMESPACE
         pname = args.PROCESS_OR_PIPELINE
