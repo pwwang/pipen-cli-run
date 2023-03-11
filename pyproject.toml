@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pipen-cli-run"
-version = "0.5.1"
+version = "0.6.0"
 description = "A pipen cli plugin to run a process or a pipeline"
 authors = ["pwwang <pwwang@pwwang.com>"]
 license = "MIT"
