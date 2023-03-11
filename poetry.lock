@@ -740,14 +740,14 @@ pipen = ">=0.6,<0.7"
 
 [[package]]
 name = "pipen-args"
-version = "0.7.0"
+version = "0.7.1"
 description = "Command-line argument parser for pipen."
 category = "main"
 optional = false
 python-versions = ">=3.7.1,<4.0.0"
 files = [
-    {file = "pipen_args-0.7.0-py3-none-any.whl", hash = "sha256:e38f320d587d4744380f729332539604a6374259b8a12430c2e839907becbd71"},
-    {file = "pipen_args-0.7.0.tar.gz", hash = "sha256:725cefbd243d52e9b886e2d696e83561173546d3089e54952804bf4723888025"},
+    {file = "pipen_args-0.7.1-py3-none-any.whl", hash = "sha256:fdb09b19070546819fd4bf48c8c4171ec7d9b4c725a2fd6a16f80214d41c42bb"},
+    {file = "pipen_args-0.7.1.tar.gz", hash = "sha256:21a10765f674db06cc24078db52193d47d8f7e28f2ee39eba3f643ee464e0caf"},
 ]
 
 [package.dependencies]
