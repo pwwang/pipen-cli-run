@@ -605,14 +605,14 @@ executing = ">1.1.0,<2.0"
 
 [[package]]
 name = "pipen"
-version = "0.9.3"
+version = "0.9.5"
 description = "A pipeline framework for python"
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pipen-0.9.3-py3-none-any.whl", hash = "sha256:b0f54d5bf41ea011317617f9799b9c55e62287d2c8dd91a3064e88b744ed0d06"},
-    {file = "pipen-0.9.3.tar.gz", hash = "sha256:150d66bc47d57785ea347a65a28a61526b1f6328a9b62333eabd2e8fde90c450"},
+    {file = "pipen-0.9.5-py3-none-any.whl", hash = "sha256:4e260d2ea48504c513ffa0ec5a934fe8c02e1a7890d04f37f045daacf351cb26"},
+    {file = "pipen-0.9.5.tar.gz", hash = "sha256:6a361703e572e045608475b8a21693c39586df563c5edec5899535fca2592c6d"},
 ]
 
 [package.dependencies]
@@ -854,6 +854,7 @@ files = [
 [package.dependencies]
 markdown-it-py = ">=2.2.0,<3.0.0"
 pygments = ">=2.13.0,<3.0.0"
+typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.9\""}
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
@@ -1066,5 +1067,5 @@ uvloop = ">=0,<1"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.9"
-content-hash = "bc6128bb5b221505aa54d243ed5abb6d49e40425315872da1d78cd7a82aa2564"
+python-versions = "^3.8"
+content-hash = "d40aaf5346a80a1866d0ada64d1879aa54c191cab3d8350f768f244bd2be76c0"
