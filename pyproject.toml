@@ -9,8 +9,8 @@ homepage = "https://github.com/pwwang/pipen-cli-run"
 repository = "https://github.com/pwwang/pipen-cli-run"
 
 [tool.poetry.dependencies]
-python = "^3.7.1"
-pipen-args = "^0.8"
+python = "^3.9"
+pipen-args = "^0.9"
 
 [tool.poetry.build]
 generate-setup-file = true
@@ -30,7 +30,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 79
-target-version = ['py37', 'py38', 'py39']
+target-version = ['py38', 'py39', 'py310']
 include = '\.pyi?$'
 
 [tool.mypy]
