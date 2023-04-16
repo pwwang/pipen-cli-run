@@ -642,14 +642,14 @@ pipen = ">=0.9,<0.10"
 
 [[package]]
 name = "pipen-args"
-version = "0.9.2"
+version = "0.9.3"
 description = "Command-line argument parser for pipen."
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pipen_args-0.9.2-py3-none-any.whl", hash = "sha256:574be06fa6bfc46f6b84a79259d9f8967b2b210db082e07103929f7160076073"},
-    {file = "pipen_args-0.9.2.tar.gz", hash = "sha256:89ba434f1db4230ca99f59fc4d4d15a9a4a86cd750f8010b8dd6f7140c736bad"},
+    {file = "pipen_args-0.9.3-py3-none-any.whl", hash = "sha256:5d9afdfc7e9362c19204e6ec4238bb74d73d5f66a9fcdd43d8db5be2d0008188"},
+    {file = "pipen_args-0.9.3.tar.gz", hash = "sha256:b8cb3a4a8e3b8d01d3d43e88d22170e65d3ac5bba5d4eee03d6c68c595517d3f"},
 ]
 
 [package.dependencies]

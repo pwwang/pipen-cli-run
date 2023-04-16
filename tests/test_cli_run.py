@@ -12,26 +12,24 @@ from . import (
 )
 from .utils import plugin_to_entrypoint
 
+pipen_cli_run_plugin_init = PipenCliRunPlugin.__init__
+
 
 def init(self, parser, subparser):
-    self.parser = parser
-    self.subparser = subparser
-    self.entry_points = {}
+    pipen_cli_run_plugin_init(self, parser, subparser)
     self.entry_points["exm_procs"] = plugin_to_entrypoint(example_procs)
     self.entry_points["exm_pipes"] = plugin_to_entrypoint(example_pipeline)
     self.entry_points["exm_extra"] = plugin_to_entrypoint(example_extra_args)
     self.entry_points["exm_pipes_proc"] = plugin_to_entrypoint(
         example_pipeline_process
     )
-    self.subparser.pre_parse = self._subparser_pre_parse
 
 
 @pytest.fixture
 def patch_init():
-    old_init = PipenCliRunPlugin.__init__
     PipenCliRunPlugin.__init__ = init
     yield
-    PipenCliRunPlugin.__init__ = old_init
+    PipenCliRunPlugin.__init__ = pipen_cli_run_plugin_init
 
 
 @contextmanager
@@ -149,24 +147,27 @@ def test_pipeline_run_process_decor(patch_init, tmp_path):
             "--ExampleProcGroup.input",
             "1",
             "--outdir",
-            str(tmp_path),
+            str(tmp_path / 'outdir'),
+            "--workdir",
+            str(tmp_path / 'workdir'),
         ]
     ):
         main()
 
-    outfile = tmp_path / "P2" / "out.txt"
+    outfile = tmp_path / "outdir" / "P2" / "out.txt"
     assert outfile.read_text().strip() == "1\n123"
 
 
 @pytest.mark.forked
 def test_pipeline_api(tmp_path):
     pipe = example_pipeline.ExampleProcGroup(input=["1"]).as_pipen(
-        outdir=str(tmp_path),
+        outdir=str(tmp_path / "outdir"),
+        workdir=str(tmp_path / "workdir"),
         name="pipeline_api",
         plugins=["no:args"],
     )
     pipe.run()
-    outfile = tmp_path / "P2" / "out.txt"
+    outfile = tmp_path / "outdir" / "P2" / "out.txt"
     assert outfile.read_text().strip() == "1\n123"
 
 

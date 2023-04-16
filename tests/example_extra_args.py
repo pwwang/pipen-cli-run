@@ -1,5 +1,5 @@
 from pipen import Proc
-from pipen_args import ProcGroup, parser, install  # noqa: F401
+from pipen_args import ProcGroup, parser
 
 
 class example_pipeline(ProcGroup):
@@ -32,3 +32,7 @@ class example_pipeline(ProcGroup):
             )
 
         return P2
+
+
+if __name__ == "__main__":
+    example_pipeline().as_pipen().run()

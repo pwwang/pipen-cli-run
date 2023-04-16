@@ -1,4 +1,4 @@
-from pipen import Pipen
+# from pipen import Pipen
 
-# disable all plugins
-Pipen.SETUP = True
+# # disable all plugins
+# Pipen.SETUP = True
