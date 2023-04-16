@@ -642,14 +642,14 @@ pipen = ">=0.9,<0.10"
 
 [[package]]
 name = "pipen-args"
-version = "0.9.3"
+version = "0.9.4"
 description = "Command-line argument parser for pipen."
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pipen_args-0.9.3-py3-none-any.whl", hash = "sha256:5d9afdfc7e9362c19204e6ec4238bb74d73d5f66a9fcdd43d8db5be2d0008188"},
-    {file = "pipen_args-0.9.3.tar.gz", hash = "sha256:b8cb3a4a8e3b8d01d3d43e88d22170e65d3ac5bba5d4eee03d6c68c595517d3f"},
+    {file = "pipen_args-0.9.4-py3-none-any.whl", hash = "sha256:05566746d5a682a4c8f52954371c16810e44b8868f265660ba24983ac481b9d7"},
+    {file = "pipen_args-0.9.4.tar.gz", hash = "sha256:98cb75632e434449e24abcffe489126d41ecde35b2811f6a36c31bdfafd37900"},
 ]
 
 [package.dependencies]
@@ -1068,4 +1068,4 @@ uvloop = ">=0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "d40aaf5346a80a1866d0ada64d1879aa54c191cab3d8350f768f244bd2be76c0"
+content-hash = "6e57c6ba2c436764529d04ef479b5c262f5cca4deec92a875aa6a10fc7cb1194"
