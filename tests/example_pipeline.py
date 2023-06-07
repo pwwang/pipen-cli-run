@@ -8,7 +8,7 @@ class ExampleProcGroup(ProcGroup):
     """This is a pipeline
 
     Args:
-        input (action:extend;nargs:+): The input
+        input (list): The input
     """
     DEFAULTS = {"input": ["100"]}
 

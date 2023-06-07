@@ -21,7 +21,7 @@ class ExampleProcGroup(ProcGroup):
     with 2 processes
 
     Args:
-        input (action:extend;nargs=+): The input
+        input (list): The input
     """
     DEFAULTS = {"input": ["100"]}
 
