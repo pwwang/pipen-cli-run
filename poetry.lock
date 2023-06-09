@@ -615,14 +615,14 @@ executing = ">1.1.0,<2.0"
 
 [[package]]
 name = "pipen"
-version = "0.9.11"
+version = "0.10.0"
 description = "A pipeline framework for python"
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pipen-0.9.11-py3-none-any.whl", hash = "sha256:f6090f4eb152f28ff97cfdc24030276ee13ddc7a8c4c6bfd1590bdbc5d2c4dfc"},
-    {file = "pipen-0.9.11.tar.gz", hash = "sha256:f0617831aad710a23fec17038bbfdfaa00ea6e3f31965e31eac236e0eab8a9ea"},
+    {file = "pipen-0.10.0-py3-none-any.whl", hash = "sha256:7e0a8340976b2ad38e8dab3037a549e44046fb29170d61f616cf71ce185df8c9"},
+    {file = "pipen-0.10.0.tar.gz", hash = "sha256:0ee9b8f6709d847537e426061be7b295fbcd222243910fc78f11b86e8d09fe99"},
 ]
 
 [package.dependencies]
@@ -637,33 +637,33 @@ xqute = ">=0.2.1,<0.3.0"
 
 [[package]]
 name = "pipen-annotate"
-version = "0.8.0"
+version = "0.9.0"
 description = "Use docstring to annotate pipen processes"
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pipen_annotate-0.8.0-py3-none-any.whl", hash = "sha256:e93c482e101378fdd42a1d3ce249144acd4122385df9a8f8b9648a049ddb5a3a"},
-    {file = "pipen_annotate-0.8.0.tar.gz", hash = "sha256:cdd5ded871f86a39172763d77657790d60c76c9f17003ae14d739f5f0da10a01"},
+    {file = "pipen_annotate-0.9.0-py3-none-any.whl", hash = "sha256:c2c0128ea8b07f291562b4757dc0a5493b93e71898ad590d6a366a3e8b66ab11"},
+    {file = "pipen_annotate-0.9.0.tar.gz", hash = "sha256:f49bc017c6238a98366775df6b50dc6acbe1f16f9dd0a320a4b5748e542e8b37"},
 ]
 
 [package.dependencies]
-pipen = ">=0.9,<0.10"
+pipen = ">=0.10,<0.11"
 
 [[package]]
 name = "pipen-args"
-version = "0.9.11"
+version = "0.10.0"
 description = "Command-line argument parser for pipen."
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pipen_args-0.9.11-py3-none-any.whl", hash = "sha256:e5f0b9dd5608a5a9224cec76ecddf2a66fc6225f5bd34545f5d2893ed1f01a74"},
-    {file = "pipen_args-0.9.11.tar.gz", hash = "sha256:00b13c4a9ddb6575895f245a9edabb66a35fcb9294ef3b97f99421bfcc1eaba1"},
+    {file = "pipen_args-0.10.0-py3-none-any.whl", hash = "sha256:4e954820d23b7ac683ff30d5ecda643cd1d0d6cd622f435d074f47347c2a3286"},
+    {file = "pipen_args-0.10.0.tar.gz", hash = "sha256:6485f23d14f06b24a534bfba7961182aefb434638277770f26fb06b7cec73ac7"},
 ]
 
 [package.dependencies]
-pipen-annotate = ">=0.8.0,<0.9.0"
+pipen-annotate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "pluggy"
@@ -1078,4 +1078,4 @@ uvloop = ">=0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "80d0ebc2089ece6425480b3b042fde5c6ad402f148cc68b0f41ab07e19ab8f55"
+content-hash = "f3bb2787c92e4bb38f389293cc31b35046565122072db31822264267204e468d"
