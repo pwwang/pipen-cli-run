@@ -162,15 +162,9 @@ class PipenCliRunPlugin(CLIPlugin):
             and proc_or_group is not ProcGroup
             and proc_or_group is not ArgsProcGroup
         ):
-            pipeline = proc_or_group().as_pipen(
-                f"{pname}_pipeline",
-                desc="",
-            )
+            pipeline = proc_or_group().as_pipen(pname, desc="")
         else:
-            pipeline = (
-                Pipen(f"{pname}_pipeline", desc="")
-                .set_start(proc_or_group)
-            )
+            pipeline = Pipen(pname, desc="").set_start(proc_or_group)
 
         # Send the args to the pipeline argument parser
         parser.set_cli_args(args.pipeline_args)
