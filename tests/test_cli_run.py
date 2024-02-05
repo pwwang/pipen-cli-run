@@ -48,6 +48,9 @@ def test_plugin_added(capsys):
 
     assert "run" in capsys.readouterr().err
 
+
+@pytest.mark.forked
+def test_wrong_choice(capsys):
     with with_argv(["pipen", "run", "xxx"]), pytest.raises(SystemExit):
         main()
 
@@ -60,16 +63,25 @@ def test_list(capsys, patch_init):
         main()
     assert "exm_procs" in capsys.readouterr().err
 
+
+@pytest.mark.forked
+def test_list_help(capsys, patch_init):
     with with_argv(["pipen", "run", "--help"]), pytest.raises(SystemExit):
         main()
     assert "exm_procs" in capsys.readouterr().out
 
+
+@pytest.mark.forked
+def test_list_ns(capsys, patch_init):
     with with_argv(["pipen", "run", "exm_procs"]), pytest.raises(SystemExit):
         main()
     out = capsys.readouterr().err
     assert "UndescribedProc" in out
     assert "P1" in out
 
+
+@pytest.mark.forked
+def test_list_ns_help(capsys, patch_init):
     with with_argv(["pipen", "run", "exm_procs", "--help"]), pytest.raises(
         SystemExit
     ):
@@ -78,10 +90,16 @@ def test_list(capsys, patch_init):
     assert "UndescribedProc" in out
     assert "P1" in out
 
+
+@pytest.mark.forked
+def test_list_ns_proc(capsys, patch_init):
     with with_argv(["pipen", "run", "exm_pipes"]), pytest.raises(SystemExit):
         main()
     assert "ExampleProcGroup" in capsys.readouterr().err
 
+
+@pytest.mark.forked
+def test_list_ns_proc_help(capsys, patch_init):
     with with_argv(["pipen", "run", "exm_pipes", "--help"]), pytest.raises(
         SystemExit
     ):
