@@ -182,7 +182,7 @@ def test_pipeline_api(tmp_path):
         outdir=str(tmp_path / "outdir"),
         workdir=str(tmp_path / "workdir"),
         name="pipeline_api",
-        plugins=["no:args"],
+        plugins=["-args"],
     )
     pipe.run()
     outfile = tmp_path / "outdir" / "P2" / "out.txt"
