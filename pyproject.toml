@@ -45,6 +45,7 @@ strict_optional = false
 addopts = "-vv -n auto -p no:asyncio --cov-config=.coveragerc --cov=pipen_cli_run --cov-report xml:.coverage.xml --cov-report term-missing"
 filterwarnings = [
     #"error"
+    "ignore:.*use of fork\\(\\) may lead to deadlocks in the child.*"
 ]
 console_output_style = "progress"
 junit_family = "xunit1"
