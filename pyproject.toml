@@ -10,14 +10,14 @@ repository = "https://github.com/pwwang/pipen-cli-run"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pipen-args = "^0.16.0"
+pipen-args = { version = "^0.17.0a1", allow-prereleases = true }
 
 [tool.poetry.build]
 generate-setup-file = true
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^8"
-pytest-cov = "^5"
+pytest-cov = "^6"
 pytest-xdist = "^3"
 pytest-forked = "^1"
 
@@ -30,7 +30,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 88
-target-version = ['py39', 'py310', 'py311']
+target-version = ['py39', 'py310', 'py311', 'py312']
 include = '\.pyi?$'
 
 [tool.mypy]
