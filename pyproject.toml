@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pipen-cli-run"
-version = "0.15.0a1"
+version = "0.15.0"
 description = "A pipen cli plugin to run a process or a pipeline"
 authors = ["pwwang <pwwang@pwwang.com>"]
 license = "MIT"
@@ -10,7 +10,7 @@ repository = "https://github.com/pwwang/pipen-cli-run"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pipen-args = { version = "^0.17.0a1", allow-prereleases = true }
+pipen-args = "^0.17"
 
 [tool.poetry.build]
 generate-setup-file = true
