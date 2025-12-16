@@ -2,6 +2,7 @@ import sys
 from contextlib import contextmanager
 
 import pytest
+import simplug
 from pipen.cli import main
 from pipen_cli_run import PipenCliRunPlugin
 from . import (
@@ -125,10 +126,10 @@ def test_pipeline(capsys, patch_init):
 
 @pytest.mark.forked
 def test_pipeline_no_starts(patch_init):
-    from pipen.exceptions import ProcDependencyError
     with with_argv(
         ["pipen", "run", "exm_pipes", "ExampleProcGroup2", "--help"]
-    ), pytest.raises(ProcDependencyError, match="No start processes"):
+    ), pytest.raises(simplug.ResultError):
+        # caused by ProcDependencyError
         main()
 
 
