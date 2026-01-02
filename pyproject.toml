@@ -10,7 +10,8 @@ repository = "https://github.com/pwwang/pipen-cli-run"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pipen-args = "^1.0"
+pipen-args = "^1.1"
+pipen = {version = "1.1.*", allow-prereleases = true}
 
 [tool.poetry.build]
 generate-setup-file = true
