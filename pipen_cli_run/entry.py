@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, List
 
 from pipen import Proc, Pipen, ProcGroup
-from pipen.cli import CLIPlugin
+from pipen.cli import AsyncCLIPlugin
 from pipen.utils import importlib_metadata
 from pipen_args import ProcGroup as ArgsProcGroup
 
@@ -29,7 +29,7 @@ def get_short_summary(docstring: str | None) -> str:
     return short_summary.rstrip()
 
 
-class PipenCliRunPlugin(CLIPlugin):
+class PipenCliRunPlugin(AsyncCLIPlugin):
     """Run a process or a pipeline"""
 
     version = __version__
@@ -145,7 +145,7 @@ class PipenCliRunPlugin(CLIPlugin):
                     )
                 )
 
-    def exec_command(self, args: Namespace) -> None:
+    async def exec_command(self, args: Namespace) -> None:
         from pipen_args import parser
 
         nsmod_name = args.PROC_NAMESPACE
@@ -168,4 +168,4 @@ class PipenCliRunPlugin(CLIPlugin):
 
         # Send the args to the pipeline argument parser
         parser.set_cli_args(args.pipeline_args)
-        pipeline.run()
+        await pipeline.async_run()
