@@ -1,33 +1,37 @@
-[tool.poetry]
+[project]
 name = "pipen-cli-run"
 version = "1.0.3"
 description = "A pipen cli plugin to run a process or a pipeline"
-authors = ["pwwang <pwwang@pwwang.com>"]
-license = "MIT"
+authors = [{name = "pwwang", email = "pwwang@pwwang.com"}]
+license = {text = "MIT"}
 readme = "README.md"
-homepage = "https://github.com/pwwang/pipen-cli-run"
-repository = "https://github.com/pwwang/pipen-cli-run"
+requires-python = ">=3.9"
+dependencies = [
+    "pipen-args>=1.2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pipen-args = "^1.2"
-pipen = {version = "1.1.*", allow-prereleases = true}
+[project.urls]
+Homepage = "https://github.com/pwwang/pipen-cli-run"
+Repository = "https://github.com/pwwang/pipen-cli-run"
 
-[tool.poetry.build]
-generate-setup-file = true
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8"
-pytest-cov = "^6"
-pytest-xdist = "^3"
-pytest-forked = "^1"
-
-[tool.poetry.plugins.pipen_cli]
+[project.entry-points."pipen_cli"]
 cli-run = "pipen_cli_run:PipenCliRunPlugin"
 
+[dependency-groups]
+dev = [
+    "flake8>=7",
+    "pytest>=8",
+    "pytest-cov>=6",
+    "pytest-xdist>=3",
+    "pytest-forked>=1",
+]
+
+[tool.uv]
+prerelease = "if-necessary-or-explicit"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 88
