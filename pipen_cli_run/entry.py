@@ -128,6 +128,8 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
                 parser._subparsers_action.add_parser(
                     attrname,
                     help=get_short_summary(doc),
+                    usage="%(prog)s [-h|-h+] [pipeline_args ...]",
+                    add_help=False,
                     prefix_chars="+",
                     exit_on_void=True,
                 ).add_argument(
@@ -143,6 +145,8 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
                 parser._subparsers_action.add_parser(
                     attrval.name,  # type: ignore
                     help=get_short_summary(doc),
+                    add_help=False,
+                    usage="%(prog)s [-h|-h+] [pipeline_args ...]",
                     prefix_chars="+",
                     exit_on_void=True,
                 ).add_argument(
