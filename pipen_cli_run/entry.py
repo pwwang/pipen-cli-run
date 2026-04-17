@@ -50,7 +50,16 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
                 # don't load them yet for performance
                 self.entry_points[epoint.name] = epoint  # pragma: no cover
 
-        subparser.pre_parse = self._subparser_pre_parse
+        if not self.entry_points:
+            print(
+                "\n"
+                "No entry points found for pipen_cli_run. \n"
+                "Make sure you have installed a package that provides entry "
+                "points for pipen_cli_run.\n"
+            )
+            sys.exit(1)
+
+        subparser.pre_parse = self._subparser_pre_parse  # type: ignore
 
     def _subparser_pre_parse(
         self,
