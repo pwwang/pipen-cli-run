@@ -1,6 +1,6 @@
 [project]
 name = "pipen-cli-run"
-version = "1.0.3"
+version = "1.0.4"
 description = "A pipen cli plugin to run a process or a pipeline"
 authors = [{name = "pwwang", email = "pwwang@pwwang.com"}]
 license = {text = "MIT"}

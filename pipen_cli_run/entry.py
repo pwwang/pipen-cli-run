@@ -1,6 +1,7 @@
 """Provides PipenCliRun"""
 from __future__ import annotations
 
+import sys
 from typing import TYPE_CHECKING, List
 
 from pipen import Proc, Pipen, ProcGroup
@@ -33,7 +34,7 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
     """Run a process or a pipeline"""
 
     version = __version__
-    name = "run"
+    name = "run"  # type: ignore
 
     def __init__(
         self,
@@ -49,15 +50,6 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
                     continue
                 # don't load them yet for performance
                 self.entry_points[epoint.name] = epoint  # pragma: no cover
-
-        if not self.entry_points:
-            print(
-                "\n"
-                "No entry points found for pipen_cli_run. \n"
-                "Make sure you have installed a package that provides entry "
-                "points for pipen_cli_run.\n"
-            )
-            sys.exit(1)
 
         subparser.pre_parse = self._subparser_pre_parse  # type: ignore
 
@@ -97,7 +89,11 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
         nsmod_name = [
             name
             for name, ps in (
-                parser.parent._subparsers_action._name_parser_map.items()
+                parser
+                .parent  # type: ignore
+                ._subparsers_action
+                ._name_parser_map
+                .items()
             )
             if ps is parser
         ][0]
@@ -159,6 +155,15 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
                 )
 
     async def exec_command(self, args: Namespace) -> None:
+        if not self.entry_points:
+            print(
+                "\n"
+                "No entry points found for pipen_cli_run. \n"
+                "Make sure you have installed a package that provides entry "
+                "points for pipen_cli_run.\n"
+            )
+            sys.exit(1)
+
         from pipen_args import parser
 
         nsmod_name = args.PROC_NAMESPACE
@@ -177,7 +182,9 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
         ):
             pipeline = proc_or_group().as_pipen(pname, desc="")
         else:
-            pipeline = Pipen(pname, desc="").set_start(proc_or_group)
+            pipeline = Pipen(pname, desc="").set_start(
+                proc_or_group  # type: ignore
+            )
 
         # Send the args to the pipeline argument parser
         parser.set_cli_args(args.pipeline_args)
