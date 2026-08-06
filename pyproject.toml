@@ -1,6 +1,6 @@
 [project]
 name = "pipen-cli-run"
-version = "1.0.4"
+dynamic = ["version"]
 description = "A pipen cli plugin to run a process or a pipeline"
 authors = [{name = "pwwang", email = "pwwang@pwwang.com"}]
 license = {text = "MIT"}
@@ -9,6 +9,9 @@ requires-python = ">=3.9"
 dependencies = [
     "pipen-args>=1.2",
 ]
+
+[tool.hatch.version]
+path = "pipen_cli_run/version.py"
 
 [project.urls]
 Homepage = "https://github.com/pwwang/pipen-cli-run"
@@ -27,7 +30,7 @@ dev = [
 ]
 
 [tool.uv]
-prerelease = "if-necessary-or-explicit"
+prerelease = "allow"
 
 [build-system]
 requires = ["hatchling"]
