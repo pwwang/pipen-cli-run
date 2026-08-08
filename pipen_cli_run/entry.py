@@ -17,8 +17,15 @@ if TYPE_CHECKING:  # pragma: no cover
 ENTRY_POINT_GROUP = "pipen_cli_run"
 
 
-def get_short_summary(docstring: str | None) -> str:
+def get_short_summary(
+    docstring: str | None,
+    varname: str | None = None,
+    procname: str | None = None,
+) -> str:
     """Get the short summary of a docstring"""
+    if varname and procname and varname != procname:
+        return f"Alias for `{procname}`"
+
     if not docstring:
         return ""
     lines = docstring.lstrip().splitlines()
@@ -139,8 +146,8 @@ class PipenCliRunPlugin(AsyncCLIPlugin):
             elif issubclass(attrval, Proc) and attrval.input:  # type: ignore
                 doc = attrval.__doc__
                 parser._subparsers_action.add_parser(
-                    attrval.name,  # type: ignore
-                    help=get_short_summary(doc),
+                    attrname,  # type: ignore
+                    help=get_short_summary(doc, attrname, attrval.name),
                     add_help=False,
                     usage="%(prog)s [-h|-h+] [pipeline_args ...]",
                     prefix_chars="+",
